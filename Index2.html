@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Happy Birthday Nida 🎉</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    .card {
+      background: white;
+      width: 90%;
+      max-width: 360px;
+      border-radius: 20px;
+      padding: 25px;
+      text-align: center;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+      animation: pop 0.7s ease;
+      position: relative;
+      z-index: 2;
+    }
+
+    @keyframes pop {
+      from { transform: scale(0.5); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+
+    .emoji {
+      font-size: 2.5rem;
+      margin-bottom: 10px;
+      animation: bounce 1s infinite alternate;
+    }
+
+    @keyframes bounce {
+      from { transform: translateY(0); }
+      to { transform: translateY(-8px); }
+    }
+
+    h1 {
+      color: #ff4081;
+      font-size: 1.8rem;
+    }
+
+    p {
+      font-size: 1.1rem;
+      color: #444;
+      margin-top: 15px;
+      min-height: 110px;
+      transition: 0.5s;
+    }
+
+    .buttons {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 20px;
+    }
+
+    button {
+      border: none;
+      padding: 10px 18px;
+      border-radius: 20px;
+      background: #ff4081;
+      color: white;
+      cursor: pointer;
+      font-size: 0.9rem;
+      transition: 0.3s;
+    }
+
+    button:hover {
+      background: #e73370;
+    }
+
+    canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      pointer-events: none;
+      z-index: 1;
+    }
+  </style>
+</head>
+<body>
+
+<canvas id="confetti"></canvas>
+
+<div class="card">
+  <div class="emoji" id="emoji">🎉</div>
+  <h1 id="title">Happy Birthday Nida!</h1>
+  <p id="text">Swipe through your surprise 😏</p>
+
+  <div class="buttons">
+    <button onclick="prevSlide()">⬅ Prev</button>
+    <button onclick="nextSlide()">Next ➡</button>
+  </div>
+</div>
+
+<script>
+  const slides = [
+    { emoji: "🎂", title: "Happy Birthday Nida!", text: "To my favorite cousin 💖 Today is all about you!" },
+    { emoji: "😂", title: "Breaking News!", text: "You’re officially one year cooler 😎" },
+    { emoji: "🍰", title: "Cake Time!", text: "Calories don’t count today. Eat everything 😋" },
+    { emoji: "😏", title: "Cousin Truth", text: "Thanks for all the fun, jokes, and memories 😂" },
+    { emoji: "🥹", title: "Emotional Alert", text: "I’m so lucky to have you as my cousin 💕" },
+    { emoji: "👑", title: "Queen Vibes", text: "Smart, kind, beautiful = YOU 👑" },
+    { emoji: "🎁", title: "My Wish", text: "May your life be full of happiness and success ✨" },
+    { emoji: "💖", title: "From Me", text: "Happy Birthday Nida! Never stop smiling 🥹💖" }
+  ];
+
+  let index = 0;
+
+  function showSlide() {
+    document.getElementById("emoji").textContent = slides[index].emoji;
+    document.getElementById("title").textContent = slides[index].title;
+    document.getElementById("text").textContent = slides[index].text;
+  }
+
+  function nextSlide() {
+    index = (index + 1) % slides.length;
+    showSlide();
+    startConfetti();
+  }
+
+  function prevSlide() {
+    index = (index - 1 + slides.length) % slides.length;
+    showSlide();
+  }
+
+  showSlide();
+
+  // 🎊 CONFETTI ANIMATION
+  const canvas = document.getElementById("confetti");
+  const ctx = canvas.getContext("2d");
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+
+  let confetti = [];
+
+  function randomColor() {
+    const colors = ["#ff4081", "#ffd700", "#00e5ff", "#7c4dff", "#00c853"];
+    return colors[Math.floor(Math.random() * colors.length)];
+  }
+
+  function createConfetti() {
+    return {
+      x: Math.random() * canvas.width,
+      y: Math.random() * canvas.height - canvas.height,
+      r: Math.random() * 6 + 4,
+      d: Math.random() * 4 + 2,
+      color: randomColor()
+    };
+  }
+
+  function startConfetti() {
+    confetti = [];
+    for (let i = 0; i < 120; i++) {
+      confetti.push(createConfetti());
+    }
+    animateConfetti();
+  }
+
+  function animateConfetti() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    confetti.forEach((c, i) => {
+      ctx.beginPath();
+      ctx.arc(c.x, c.y, c.r, 0, Math.PI * 2);
+      ctx.fillStyle = c.color;
+      ctx.fill();
+      c.y += c.d;
+
+      if (c.y > canvas.height) {
+        confetti[i] = createConfetti();
+      }
+    });
+
+    requestAnimationFrame(animateConfetti);
+  }
+
+  window.addEventListener("resize", () => {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+  });
+</script>
+
+</body>
+</html>
